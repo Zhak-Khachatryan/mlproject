@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from "react"
-import Header from "./components/Header"
-import HomePage from "./components/HomePage"
-import FileDisplay from "./components/FileDisplay"
-import Information from "./components/Information"
-import Transcribing from "./components/Transcribing"
-import { MessageTypes } from "./utils/presets"
+import { useState, useRef, useEffect } from 'react'
+import HomePage from './components/HomePage'
+import Header from './components/Header'
+import FileDisplay from './components/FileDisplay'
+import Information from './components/Information'
+import Transcribing from './components/Transcribing'
+import { MessageTypes } from './utils/presets'
 
 function App() {
   const [file, setFile] = useState(null)
@@ -42,10 +42,11 @@ function App() {
           break;
         case 'RESULT':
           setOutput(e.data.results)
+          console.log(e.data.results)
           break;
         case 'INFERENCE_DONE':
           setFinished(true)
-          console.log('DONE')
+          console.log("DONE")
           break;
       }
     }
@@ -70,22 +71,19 @@ function App() {
     let audio = await readAudioFrom(file ? file : audioStream)
     const model_name = `openai/whisper-tiny.en`
 
-    worker.current.postMessage(
-      {
-        type: MessageTypes.INFERENCE_REQUEST,
-        audio,
-        model_name
-      }
-    )
+    worker.current.postMessage({
+      type: MessageTypes.INFERENCE_REQUEST,
+      audio,
+      model_name
+    })
   }
 
   return (
-    <div className="flex flex-col max-w-[1000px]
-    mx-auto w-full">
-      <section className="min-h-screen flex flex-col">
+    <div className='flex flex-col max-w-[1000px] mx-auto w-full'>
+      <section className='min-h-screen flex flex-col'>
         <Header />
         {output ? (
-          <Information output={output} />
+          <Information output={output} finished={finished}/>
         ) : loading ? (
           <Transcribing />
         ) : isAudioAvailable ? (
@@ -94,9 +92,7 @@ function App() {
           <HomePage setFile={setFile} setAudioStream={setAudioStream} />
         )}
       </section>
-      <footer>
-
-      </footer>
+      <footer></footer>
     </div>
   )
 }

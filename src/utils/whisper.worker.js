@@ -48,7 +48,6 @@ async function transcribe(audio) {
         chunk_callback: generationTracker.chunkCallback.bind(generationTracker)
     })
     generationTracker.sendFinalResult()
-
 }
 
 async function load_model_callback(data) {
@@ -122,8 +121,9 @@ class GenerationTracker {
         )
 
         this.processed_chunks = chunks.map((chunk, index) => {
-            this.processChunk(chunk, index)
+            return this.processChunk(chunk, index)
         })
+
 
         createResultMessage(
             this.processed_chunks, false, this.getLastChunkTimestamp()
@@ -148,8 +148,6 @@ class GenerationTracker {
         }
 
     }
-
-
 }
 
 function createResultMessage(results, isDone, completedUntilTimestamp) {
